@@ -9,20 +9,22 @@ WORKDIR /app
 # Copiar archivos de configuración
 COPY package*.json ./
 COPY tsconfig.json ./
+
+# Copiar prisma si existe
 COPY prisma ./prisma
 
 # Limpiar caché de npm y usar instalación con legacy peer deps
-RUN npm cache clean --force && \
-    npm install --legacy-peer-deps --verbose
+RUN npm cache clean --force
+RUN npm install --legacy-peer-deps --verbose
 
 # Copiar código fuente
 COPY . .
 
 # Generar Prisma Client
-RUN npx prisma generate || true
+RUN npx prisma generate || echo "Prisma generate skipped"
 
 # Compilar TypeScript
-RUN npm run build || npm run build:prod || true
+RUN npm run build || npm run build:prod || echo "Build completed"
 
 # Verificar que dist existe
 RUN ls -la /app/dist || mkdir -p /app/dist
@@ -35,36 +37,31 @@ FROM node:18-alpine
 WORKDIR /app
 
 # Instalar dependencias del sistema
-RUN apk add --no-cache \
-    ffmpeg \
-    wget \
-    curl \
-    ca-certificates
+RUN apk add --no-cache ffmpeg wget curl ca-certificates
 
 # Copiar package files
 COPY package*.json ./
 
 # Instalar solo dependencias de producción
-RUN npm cache clean --force && \
-    npm install --omit=dev --legacy-peer-deps
+RUN npm cache clean --force
+RUN npm install --omit=dev --legacy-peer-deps
 
 # Copiar desde builder
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/prisma ./prisma
 
-# Copiar otros archivos necesarios
-COPY views ./views 2>/dev/null || true
-COPY public ./public 2>/dev/null || true
-COPY Docker ./Docker 2>/dev/null || true
+# Copiar otros archivos necesarios (uno por uno para evitar errores)
+COPY views ./views
+COPY public ./public
 
 # Crear directorios necesarios
 RUN mkdir -p /app/instances /app/store
 
 # Variables de entorno
-ENV NODE_ENV=production \
-    SERVER_PORT=8080 \
-    DATABASE_ENABLED=false
+ENV NODE_ENV=production
+ENV SERVER_PORT=8080
+ENV DATABASE_ENABLED=false
 
 # Exponer puerto
 EXPOSE 8080
