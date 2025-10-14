@@ -8,10 +8,6 @@ services:
     region: oregon
     healthCheckPath: /
     autoDeploy: true
-    disk:
-      name: evolution-data
-      mountPath: /evolution/instances
-      sizeGB: 1
     envVars:
       - key: AUTHENTICATION_API_KEY
         value: mi-clave-secreta-espaico-2024
@@ -19,8 +15,6 @@ services:
         value: http
       - key: SERVER_PORT
         value: 8080
-      - key: SERVER_URL
-        generateValue: true
       - key: CORS_ORIGIN
         value: "*"
       - key: CORS_METHODS
@@ -69,7 +63,3 @@ services:
         value: "false"
       - key: CACHE_LOCAL_ENABLED
         value: "false"
-
-disks:
-  - name: evolution-data
-    sizeGB: 1
