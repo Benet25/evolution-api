@@ -1,6 +1,13 @@
-.git
-*Dockerfile*
-*docker-compose*
-.env
 node_modules
 dist
+.env
+.git
+.gitignore
+*.log
+npm-debug.log*
+.DS_Store
+coverage
+.vscode
+.idea
+instances
+store
