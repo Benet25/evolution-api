@@ -9,45 +9,53 @@ services:
     branch: main
     healthCheckPath: /
     autoDeploy: true
+    disk:
+      name: evolution-data
+      mountPath: /app/instances
+      sizeGB: 1
     envVars:
+      - key: NODE_ENV
+        value: production
       - key: AUTHENTICATION_API_KEY
         value: mi-clave-secreta-espaico-2024
       - key: SERVER_TYPE
         value: http
       - key: SERVER_PORT
         value: 8080
+      - key: SERVER_URL
+        sync: false
       - key: CORS_ORIGIN
         value: "*"
       - key: CORS_METHODS
         value: POST,GET,PUT,DELETE
       - key: CORS_CREDENTIALS
-        value: true
+        value: "true"
       - key: LOG_LEVEL
         value: ERROR,WARN,INFO
       - key: LOG_COLOR
-        value: true
+        value: "true"
       - key: DATABASE_ENABLED
-        value: false
+        value: "false"
       - key: DATABASE_PROVIDER
         value: postgresql
       - key: DATABASE_CONNECTION_URI
         value: ""
       - key: DATABASE_SAVE_DATA_INSTANCE
-        value: false
+        value: "false"
       - key: DATABASE_SAVE_DATA_NEW_MESSAGE
-        value: false
+        value: "false"
       - key: DATABASE_SAVE_MESSAGE_UPDATE
-        value: false
+        value: "false"
       - key: DATABASE_SAVE_DATA_CONTACTS
-        value: false
+        value: "false"
       - key: DATABASE_SAVE_DATA_CHATS
-        value: false
+        value: "false"
       - key: DEL_INSTANCE
-        value: false
+        value: "false"
       - key: DEL_TEMP_INSTANCES
-        value: true
+        value: "true"
       - key: QRCODE_LIMIT
-        value: 30
+        value: "30"
       - key: QRCODE_COLOR
         value: "#198754"
       - key: CONFIG_SESSION_PHONE_CLIENT
@@ -57,18 +65,14 @@ services:
       - key: CONFIG_SESSION_PHONE_VERSION
         value: 2.3000.1023204200
       - key: WEBHOOK_GLOBAL_ENABLED
-        value: false
+        value: "false"
       - key: WEBHOOK_GLOBAL_URL
         value: ""
-      - key: WEBHOOK_GLOBAL_WEBHOOK_BY_EVENTS
-        value: false
       - key: CACHE_REDIS_ENABLED
-        value: false
-      - key: CACHE_REDIS_URI
-        value: ""
-      - key: CACHE_REDIS_PREFIX_KEY
-        value: evolution
-      - key: CACHE_REDIS_SAVE_INSTANCES
-        value: false
+        value: "false"
       - key: CACHE_LOCAL_ENABLED
-        value: false
+        value: "false"
+
+disks:
+  - name: evolution-data
+    sizeGB: 1
