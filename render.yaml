@@ -2,20 +2,17 @@ services:
   - type: web
     name: evolution-api-espaico
     runtime: docker
+    image:
+      url: atendai/evolution-api:v2.1.1
     plan: free
     region: oregon
-    dockerfilePath: ./Dockerfile
-    dockerContext: .
-    branch: main
     healthCheckPath: /
     autoDeploy: true
     disk:
       name: evolution-data
-      mountPath: /app/instances
+      mountPath: /evolution/instances
       sizeGB: 1
     envVars:
-      - key: NODE_ENV
-        value: production
       - key: AUTHENTICATION_API_KEY
         value: mi-clave-secreta-espaico-2024
       - key: SERVER_TYPE
@@ -23,7 +20,7 @@ services:
       - key: SERVER_PORT
         value: 8080
       - key: SERVER_URL
-        sync: false
+        generateValue: true
       - key: CORS_ORIGIN
         value: "*"
       - key: CORS_METHODS
